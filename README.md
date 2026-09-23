@@ -16,7 +16,7 @@ The exact Google Maps location link is already configured in `index.html`, and t
 - Real café exterior/interior photos supplied by the owner
 - Real café video supplied by the owner, transcoded to H.264 for browser compatibility
 - Full menu data transcribed from the supplied BeCafe menu PDF
-- Official menu PDF included at `assets/becafe-official-menu.pdf`
+- Official menu PDF included at `becafe-official-menu.pdf`
 - BeCafe customer-care email plus the outlet Instagram handle @becafe_rke
 
 ## Menu note
