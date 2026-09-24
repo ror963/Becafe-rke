@@ -28,5 +28,6 @@ Prices shown are taken from the supplied menu and are exclusive of taxes. Some i
 - `becafe-official-menu.pdf` is the new menu.
 - Google Reviews section links directly to the outlet Google Maps listing and embeds the location. Customer quotes are not hard-coded unless they can be verified.
 
-## 2026-09-24 review update
-The Reviews section now includes five customer review cards based on the Google Maps reviews supplied by the owner, plus a direct link and embedded map for the Be Cafe Arya FS listing.
+
+### Compact menu update
+The homepage now shows a small Popular Picks menu preview. Visitors can tap **View full menu** to reveal category filters, search, the complete item list and add-on notes.

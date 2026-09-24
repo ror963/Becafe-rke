@@ -123,6 +123,7 @@ const count = document.querySelector('#menuCount');
 const search = document.querySelector('#menuSearch');
 const tabs = [...document.querySelectorAll('.menu-tab')];
 let category = 'all';
+let menuExpanded = false;
 
 function priceHTML(item){
   if (item.p) return `<span class="price-pill"><b>₹${item.p}</b></span>`;
@@ -131,8 +132,14 @@ function priceHTML(item){
 
 function renderMenu(){
   const q = search.value.trim().toLowerCase();
-  const items = MENU.filter(item => (category === 'all' || item.c === category) && (!q || `${item.n} ${item.s} ${item.note || ''}`.toLowerCase().includes(q)));
-  count.textContent = `${items.length} item${items.length === 1 ? '' : 's'}`;
+  let items;
+  if (!menuExpanded && !q && category === 'all') {
+    const preferred = ['Cappuccino','Hazelnut Mocha','Cold Chocolate','Double Tikki Veg Burger','Paneer Tikka Sandwich','Brownie Sizzler'];
+    items = preferred.map(name => MENU.find(item => item.n === name)).filter(Boolean);
+  } else {
+    items = MENU.filter(item => (category === 'all' || item.c === category) && (!q || `${item.n} ${item.s} ${item.note || ''}`.toLowerCase().includes(q)));
+  }
+  count.textContent = menuExpanded ? `${items.length} item${items.length === 1 ? '' : 's'}` : 'A few favourites';
   grid.innerHTML = items.length ? items.map(item => `
     <article class="menu-item ${item.rec ? 'recommended' : ''}">
       <div class="menu-item-top">
@@ -153,6 +160,33 @@ tabs.forEach(tab => tab.addEventListener('click', () => {
   renderMenu();
 }));
 search.addEventListener('input', renderMenu);
+
+const menuSection = document.querySelector('#menu');
+const fullMenuControls = document.querySelector('#fullMenuControls');
+const menuExpandBtn = document.querySelector('#menuExpandBtn');
+const menuExpandLabel = menuExpandBtn?.querySelector('.menu-expand-label');
+
+function setMenuExpanded(expanded){
+  menuExpanded = expanded;
+  menuSection?.classList.toggle('menu-expanded', expanded);
+  fullMenuControls?.classList.toggle('open', expanded);
+  fullMenuControls?.setAttribute('aria-hidden', expanded ? 'false' : 'true');
+  menuExpandBtn?.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+  if (menuExpandLabel) menuExpandLabel.textContent = expanded ? 'Show less' : 'View full menu';
+  if (!expanded) {
+    category = 'all';
+    tabs.forEach((t, i) => t.classList.toggle('active', i === 0));
+    search.value = '';
+  }
+  renderMenu();
+}
+
+menuExpandBtn?.addEventListener('click', () => {
+  const next = !menuExpanded;
+  setMenuExpanded(next);
+  if (!next) menuSection?.scrollIntoView({behavior:'smooth', block:'start'});
+});
+
 renderMenu();
 
 // Navigation + progress

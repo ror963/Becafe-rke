@@ -29,6 +29,13 @@
     "sameAs": ["https://www.instagram.com/becafe_rke/"]
   }
   </script>
+  <style id="reviews-visibility-failsafe">
+    #reviews, #reviews .reviews-head, #reviews .review-card, #reviews .reviews-map {
+      opacity: 1 !important;
+      visibility: visible !important;
+      transform: none !important;
+    }
+  </style>
 </head>
 <body>
   <div class="preloader" id="preloader" aria-hidden="true">
@@ -166,24 +173,36 @@
         </div>
       </div>
 
-      <div class="menu-toolbar reveal">
-        <div class="menu-tabs" role="tablist" aria-label="Menu categories">
-          <button class="menu-tab active" data-category="all">All</button>
-          <button class="menu-tab" data-category="hot">Hot</button>
-          <button class="menu-tab" data-category="cold">Cold</button>
-          <button class="menu-tab" data-category="food">Food</button>
-          <button class="menu-tab" data-category="sweet">Sweet</button>
+      <div class="menu-preview-bar reveal">
+        <div>
+          <span class="menu-preview-kicker">Popular picks</span>
+          <p>Start with a few favourites, or open the complete menu when you’re ready.</p>
         </div>
-        <label class="menu-search">
-          <span>⌕</span>
-          <input id="menuSearch" type="search" placeholder="Search cappuccino, fries, waffle…" autocomplete="off" />
-        </label>
+        <button class="menu-expand-btn" id="menuExpandBtn" type="button" aria-expanded="false" aria-controls="fullMenuControls">
+          <span class="menu-expand-label">View full menu</span><i>↓</i>
+        </button>
+      </div>
+
+      <div class="menu-full-controls" id="fullMenuControls" aria-hidden="true">
+        <div class="menu-toolbar">
+          <div class="menu-tabs" role="tablist" aria-label="Menu categories">
+            <button class="menu-tab active" data-category="all">All</button>
+            <button class="menu-tab" data-category="hot">Hot</button>
+            <button class="menu-tab" data-category="cold">Cold</button>
+            <button class="menu-tab" data-category="food">Food</button>
+            <button class="menu-tab" data-category="sweet">Sweet</button>
+          </div>
+          <label class="menu-search">
+            <span>⌕</span>
+            <input id="menuSearch" type="search" placeholder="Search cappuccino, fries, waffle…" autocomplete="off" />
+          </label>
+        </div>
       </div>
 
       <div class="menu-results-meta"><span id="menuCount"></span><span>Prices are exclusive of taxes</span></div>
-      <div class="menu-grid" id="menuGrid" aria-live="polite"></div>
+      <div class="menu-grid menu-grid-compact" id="menuGrid" aria-live="polite"></div>
 
-      <div class="menu-addons reveal">
+      <div class="menu-addons menu-addons-collapsible reveal">
         <div><span>+35</span><p><b>Add a flavour</b><br>Hazelnut · Caramel · Chocolate · Vanilla</p></div>
         <div><span>+50</span><p><b>Add ice cream</b><br>Vanilla · Chocolate</p></div>
         <p class="availability-note">Some items and waffle flavours are subject to availability.</p>
@@ -206,7 +225,7 @@
 
 
     <section class="reviews section" id="reviews">
-      <div class="reviews-head reveal">
+      <div class="reviews-head">
         <div>
           <p class="eyebrow">Google reviews</p>
           <h2>Loved on the road.<br><em>Rated by guests.</em></h2>
@@ -218,21 +237,21 @@
       </div>
 
       <div class="review-cards">
-        <article class="review-card reveal">
+        <article class="review-card">
           <div class="review-card-top"><span class="review-avatar">S</span><div><h3>Sumit Taver</h3><small>Google Local Guide</small></div><span class="review-source">G</span></div>
           <div class="review-stars" aria-label="5 out of 5 stars">★★★★★</div>
           <blockquote>“Nice cafeteria, neat and clean good professional staff.”</blockquote>
           <a href="https://maps.app.goo.gl/uAaVFkDz9fiThdFA9?g_st=ac" target="_blank" rel="noopener">View on Google ↗</a>
         </article>
 
-        <article class="review-card review-card-featured reveal delay-1">
+        <article class="review-card review-card-featured">
           <div class="review-card-top"><span class="review-avatar">Y</span><div><h3>Yogesh Jole</h3><small>Google Local Guide</small></div><span class="review-source">G</span></div>
           <div class="review-stars" aria-label="5 out of 5 stars">★★★★★</div>
           <blockquote>“Visited BeCafe at Arya Filling Station, Roorkee Bypass, and had a wonderful experience. The café was clean, welcoming, and served fresh, great-tasting food. The staff was courteous and ensured quick service throughout. A perfect stop for anyone looking to relax and refresh during their journey.”</blockquote>
           <a href="https://maps.app.goo.gl/uAaVFkDz9fiThdFA9?g_st=ac" target="_blank" rel="noopener">View on Google ↗</a>
         </article>
 
-        <article class="review-card reveal delay-2">
+        <article class="review-card">
           <div class="review-card-top"><span class="review-avatar">R</span><div><h3>Ravi Punia</h3><small>Google review</small></div><span class="review-source">G</span></div>
           <div class="review-stars" aria-label="5 out of 5 stars">★★★★★</div>
           <blockquote>“Good quality coffee and service for Jaideep.”</blockquote>
@@ -240,7 +259,7 @@
           <a href="https://maps.app.goo.gl/uAaVFkDz9fiThdFA9?g_st=ac" target="_blank" rel="noopener">View on Google ↗</a>
         </article>
 
-        <article class="review-card reveal">
+        <article class="review-card">
           <div class="review-card-top"><span class="review-avatar">S</span><div><h3>Shivaji Turke</h3><small>Google Local Guide</small></div><span class="review-source">G</span></div>
           <div class="review-stars" aria-label="5 out of 5 stars">★★★★★</div>
           <blockquote>“Great experience, tried their burger and cold coffee. It's a must try.”</blockquote>
@@ -248,7 +267,7 @@
           <a href="https://maps.app.goo.gl/uAaVFkDz9fiThdFA9?g_st=ac" target="_blank" rel="noopener">View on Google ↗</a>
         </article>
 
-        <article class="review-card review-score-card reveal delay-1">
+        <article class="review-card review-score-card">
           <div class="review-card-top"><span class="review-avatar">R</span><div><h3>Ranjeet Kaushal</h3><small>Google Local Guide</small></div><span class="review-source">G</span></div>
           <div class="review-stars" aria-label="5 out of 5 stars">★★★★★</div>
           <div class="review-scores"><span><b>5/5</b> Food</span><span><b>5/5</b> Service</span></div>
@@ -256,7 +275,7 @@
           <a href="https://maps.app.goo.gl/uAaVFkDz9fiThdFA9?g_st=ac" target="_blank" rel="noopener">View on Google ↗</a>
         </article>
 
-        <div class="reviews-map reveal delay-2">
+        <div class="reviews-map">
           <iframe title="Be Cafe Arya FS on Google Maps" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=Be%20Cafe%20Arya%20FS%20Roorkee%20Bypass%20Uttarakhand&output=embed"></iframe>
           <div class="reviews-map-note"><span>Be Cafe Arya FS · Roorkee Bypass</span><a href="https://maps.app.goo.gl/uAaVFkDz9fiThdFA9?g_st=ac" target="_blank" rel="noopener">Open Maps ↗</a></div>
         </div>
