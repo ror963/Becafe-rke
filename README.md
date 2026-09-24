@@ -21,3 +21,12 @@ The exact Google Maps location link is already configured in `index.html`, and t
 
 ## Menu note
 Prices shown are taken from the supplied menu and are exclusive of taxes. Some items/flavours may be subject to availability.
+
+
+## September 2026 menu update
+- Menu prices/items updated from the new 13-page scanned BeCafe menu supplied by the owner.
+- `becafe-official-menu.pdf` is the new menu.
+- Google Reviews section links directly to the outlet Google Maps listing and embeds the location. Customer quotes are not hard-coded unless they can be verified.
+
+## 2026-09-24 review update
+The Reviews section now includes five customer review cards based on the Google Maps reviews supplied by the owner, plus a direct link and embedded map for the Be Cafe Arya FS listing.
