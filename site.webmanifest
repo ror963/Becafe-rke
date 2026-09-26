@@ -1,9 +1,15 @@
 {
-  "name":"BeCafe — Brewing Journeys",
-  "short_name":"BeCafe",
-  "start_url":"/",
-  "display":"standalone",
-  "background_color":"#1c1511",
-  "theme_color":"#1c1511",
-  "icons":[{"src":"favicon.svg","sizes":"any","type":"image/svg+xml"}]
+  "name": "Be Cafe Arya FS",
+  "short_name": "BeCafe",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fff9ee",
+  "theme_color": "#1c1511",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
 }

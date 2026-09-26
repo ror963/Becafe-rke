@@ -1,48 +1,48 @@
-# BeCafe RKE — Growth Upgrade
+# BeCafe Arya FS — Sales Upgrade
 
-This build is ready for the existing flat-file GitHub/Vercel deployment.
+This build adds the next growth layer to the existing site.
 
-## New customer-facing features
-- Interactive **What are you craving?** recommender with Coffee / Hungry / Something Cold / Sweet modes.
-- **Road-trip pit stop** section with a direct Google Maps CTA.
-- Configurable **Today at BeCafe** live-offer block.
-- Existing compact menu, real Google reviews, gallery, video, Instagram and Maps integration retained.
-- Vercel Web Analytics + Speed Insights scripts included.
+## Added
+- Quick-order cart on every menu item and craving recommendation.
+- Pickup timing, optional customer name/notes, quantity controls and estimated menu total.
+- WhatsApp order handoff plus copy-order fallback.
+- Mobile bottom bar: Directions / Menu / Order.
+- Printable/table QR code that opens the live menu with analytics tags.
+- Local SEO upgrades for Be Cafe Arya FS / Roorkee Bypass.
+- Canonical URL, OpenGraph/Twitter metadata, CafeOrCoffeeShop structured data, sitemap and robots.
+- QR-scan and order conversion analytics hooks.
 
-## Change the live offer
-Open `script.js` and edit the `LIVE_OFFER` object near the bottom:
+## Important: direct WhatsApp number
+The website is fully functional in WhatsApp **share mode** because no outlet WhatsApp number was supplied.
 
-- `active: true` shows the offer; `false` hides it.
-- Change `title`, `text`, `cta`, `href`, and `note`.
-- Commit the edit to GitHub; Vercel redeploys automatically.
+To make every order go directly to the cafe:
+1. Open `script.js`.
+2. Find `whatsappNumber: ''`.
+3. Put the cafe WhatsApp number with country code and digits only.
+   Example format: `919876543210`
+4. Commit the file.
 
-This lets you update the offer without touching the HTML or CSS.
+Do not use the example number above.
 
-## Analytics
-The site includes Vercel Web Analytics and Speed Insights.
+## QR menu
+- Website QR file: `menu-qr.png`
+- Print-ready counter/table card: `becafe-menu-qr-card.png`
+- QR destination: `https://becafe-rke.vercel.app/?utm_source=table_qr&utm_medium=offline&utm_campaign=menu#menu`
 
-After deployment:
-1. Open the BeCafe project in Vercel.
-2. Open **Analytics** and enable Web Analytics if it is not already enabled.
-3. Open **Speed Insights** and enable it.
-4. Visit the live site in an incognito/private window, then check Analytics after data starts arriving.
+This means QR traffic can be identified separately in analytics.
 
-Tracked conversion hooks include:
-- menu opened
-- craving selected
-- recommended item opened
-- directions click
-- Google reviews click
-- Instagram click
-- menu PDF opened
-- live-offer click
+## Deploy update to your existing GitHub/Vercel site
+The small patch contains:
+- index.html
+- style.css
+- script.js
+- menu-qr.png
+- becafe-menu-qr-card.png
+- sitemap.xml
+- robots.txt
+- site.webmanifest
 
-Page-view analytics work with Vercel Web Analytics. Availability of custom conversion events depends on the Vercel plan.
+Upload those files to the root of your existing GitHub `Becafe-rke` repository and replace matching files. Vercel will redeploy automatically.
 
-## Deploy this update
-For the existing GitHub repository, replace only:
-- `index.html`
-- `style.css`
-- `script.js`
-
-Or upload the complete build from the full ZIP.
+## Vercel
+Keep Web Analytics and Speed Insights enabled in the project dashboard for visitor and performance data.

@@ -4,12 +4,21 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#1c1511" />
-  <meta name="description" content="BeCafe by Bharat Petroleum — coffee, cold beverages, quick bites, desserts and a warm road-trip stop." />
-  <meta property="og:title" content="BeCafe — Brewing Journeys" />
-  <meta property="og:description" content="Coffee, quick bites and a warm place to pause. Explore the BeCafe menu and the café experience." />
+  <meta name="description" content="Be Cafe Arya FS at Arya Filling Station on Roorkee Bypass, Roorkee. Coffee, cold beverages, burgers, sandwiches, wraps, momos, pizza, desserts and quick vegetarian bites for local visits and road trips." />
+  <meta property="og:title" content="Be Cafe Arya FS | Cafe & Coffee on Roorkee Bypass" />
+  <meta property="og:description" content="Coffee, quick bites and a better road-trip pause at Be Cafe Arya FS, Roorkee Bypass." />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="night.webp" />
-  <title>BeCafe — Brewing Journeys</title>
+  <meta property="og:image" content="https://becafe-rke.vercel.app/night.webp" />
+  <title>Be Cafe Arya FS | Cafe & Coffee on Roorkee Bypass</title>
+
+  <link rel="canonical" href="https://becafe-rke.vercel.app/" />
+  <meta property="og:url" content="https://becafe-rke.vercel.app/" />
+  <meta property="og:site_name" content="Be Cafe Arya FS" />
+  <meta property="og:locale" content="en_IN" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Be Cafe Arya FS | Roorkee Bypass" />
+  <meta name="twitter:description" content="Coffee, quick bites and a better road-trip pause at Be Cafe Arya FS." />
+  <meta name="twitter:image" content="https://becafe-rke.vercel.app/night.webp" />
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="manifest" href="site.webmanifest" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,17 +32,61 @@
   <script defer src="/_vercel/insights/script.js"></script>
   <script defer src="/_vercel/speed-insights/script.js"></script>
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "CafeOrCoffeeShop",
-    "name": "BeCafe",
-    "description": "BeCafe by Bharat Petroleum — coffee, cold beverages, quick bites and desserts.",
-    "image": ["night.webp", "counter.webp", "sandwich.webp"],
-    "servesCuisine": ["Cafe", "Coffee", "Quick Bites", "Vegetarian"],
-    "email": "customercare@becafe.co.in",
-    "priceRange": "₹₹",
-    "sameAs": ["https://www.instagram.com/becafe_rke/"]
-  }
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CafeOrCoffeeShop",
+      "@id": "https://becafe-rke.vercel.app/#cafe",
+      "name": "Be Cafe Arya FS",
+      "alternateName": "BeCafe Arya FS",
+      "url": "https://becafe-rke.vercel.app/",
+      "description": "BeCafe by Bharat Petroleum at Arya Filling Station on Roorkee Bypass, serving coffee, cold beverages, vegetarian quick bites and desserts.",
+      "image": [
+        "https://becafe-rke.vercel.app/night.webp",
+        "https://becafe-rke.vercel.app/counter.webp",
+        "https://becafe-rke.vercel.app/sandwich.webp"
+      ],
+      "servesCuisine": [
+        "Coffee",
+        "Cafe",
+        "Vegetarian",
+        "Quick Bites",
+        "Desserts"
+      ],
+      "priceRange": "₹₹",
+      "email": "customercare@becafe.co.in",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Arya Filling Station, Roorkee Bypass",
+        "addressLocality": "Roorkee",
+        "addressRegion": "Uttarakhand",
+        "addressCountry": "IN"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 29.8843574,
+        "longitude": 77.9565596
+      },
+      "hasMap": "https://maps.app.goo.gl/uAaVFkDz9fiThdFA9?g_st=ac",
+      "hasMenu": "https://becafe-rke.vercel.app/#menu",
+      "sameAs": [
+        "https://www.instagram.com/becafe_rke/",
+        "https://maps.app.goo.gl/uAaVFkDz9fiThdFA9?g_st=ac"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://becafe-rke.vercel.app/#website",
+      "url": "https://becafe-rke.vercel.app/",
+      "name": "Be Cafe Arya FS",
+      "inLanguage": "en-IN",
+      "publisher": {
+        "@id": "https://becafe-rke.vercel.app/#cafe"
+      }
+    }
+  ]
+}
   </script>
   <style id="reviews-visibility-failsafe">
     #reviews, #reviews .reviews-head, #reviews .review-card, #reviews .reviews-map {
@@ -68,7 +121,7 @@
       <a href="#visit">Visit</a>
     </nav>
 
-    <a class="nav-cta" href="#menu">Explore menu <span>↗</span></a>
+    <button class="nav-cta nav-order-cta" id="navOrderBtn" type="button">Quick order <span>↗</span></button>
     <button class="menu-toggle" id="menuToggle" aria-label="Open navigation" aria-expanded="false"><i></i><i></i></button>
   </header>
 
@@ -79,6 +132,7 @@
     <a href="#gallery">Gallery</a>
     <a href="#reviews">Reviews</a>
     <a href="#visit">Visit</a>
+    <button class="mobile-order-link" id="mobileNavOrderBtn" type="button">Quick order <span>↗</span></button>
     <a class="mobile-menu-link" href="becafe-official-menu.pdf" target="_blank" rel="noopener">Official menu PDF ↗</a>
   </div>
 
@@ -94,7 +148,7 @@
         <h1>Your journey deserves<br><em>a better pause.</em></h1>
         <p>Fresh coffee, chilled favourites, quick bites and a café corner made for the moments between destinations.</p>
         <div class="hero-actions">
-          <a class="btn btn-yellow" href="#menu">See the full menu <span>↗</span></a>
+          <a class="btn btn-yellow" href="#cravings">Help me choose <span>↗</span></a>
           <a class="btn btn-ghost" href="#experience">Step inside <span>↓</span></a>
         </div>
       </div>
@@ -275,6 +329,25 @@
       </div>
     </section>
 
+
+    <section class="qr-menu-section section" id="qr-menu">
+      <div class="qr-menu-copy reveal">
+        <p class="eyebrow">Table &amp; counter QR</p>
+        <h2>Scan. Choose.<br><em>Skip the paper menu.</em></h2>
+        <p>Open the live BeCafe menu on your phone, browse the latest prices and build a quick pickup order. The QR points directly to this menu and is tagged for analytics.</p>
+        <div class="qr-actions">
+          <a class="btn btn-dark" href="#menu">Open menu now <span>↗</span></a>
+          <a class="qr-download" href="becafe-menu-qr-card.png" download>Download printable QR card ↓</a>
+        </div>
+      </div>
+      <div class="qr-menu-card reveal delay-1">
+        <div class="qr-live-dot"><i></i> LIVE MENU</div>
+        <img src="menu-qr.png" alt="QR code opening the BeCafe Arya FS live menu" loading="lazy" />
+        <b>Be Cafe Arya FS</b>
+        <span>Scan for menu · Roorkee Bypass</span>
+      </div>
+    </section>
+
     <section class="gallery section" id="gallery">
       <div class="gallery-head reveal">
         <p class="eyebrow">Inside BeCafe</p>
@@ -357,7 +430,7 @@
       <div class="visit-copy reveal delay-1">
         <p class="eyebrow">Come by</p>
         <h2>Make BeCafe<br><em>part of the route.</em></h2>
-        <p>Find the Roorkee outlet on Google Maps, read customer reviews, or connect with BeCafe on Instagram.</p>
+        <p><strong>Be Cafe Arya FS</strong> is at Arya Filling Station on Roorkee Bypass, Roorkee, Uttarakhand — a convenient coffee and quick-bite stop for local café visits and road trips. Find the exact outlet on Google Maps, read customer reviews, or connect with us on Instagram.</p>
 
         <div class="visit-links">
           <a href="https://maps.app.goo.gl/uAaVFkDz9fiThdFA9?g_st=ac" target="_blank" rel="noopener"><span>01</span><div><b>Find us on Maps</b><small>Open the exact BeCafe location in Google Maps</small></div><i>↗</i></a>
@@ -390,7 +463,70 @@
     </div>
   </footer>
 
-  <a class="floating-menu" href="#menu"><span>Menu</span><i>↗</i></a>
+
+  <div class="mobile-action-bar" aria-label="Quick actions">
+    <a href="https://maps.app.goo.gl/uAaVFkDz9fiThdFA9?g_st=ac" target="_blank" rel="noopener"><span>⌖</span><small>Directions</small></a>
+    <a href="#menu"><span>☰</span><small>Menu</small></a>
+    <button id="mobileOrderBtn" type="button"><span>◉</span><small>Order <b id="mobileCartCount">0</b></small></button>
+  </div>
+
+  <button class="order-fab" id="orderFab" type="button" aria-label="Open quick order">
+    <span>Quick order</span><b id="cartCount">0</b>
+  </button>
+
+  <div class="order-overlay" id="orderOverlay" aria-hidden="true">
+    <aside class="order-drawer" role="dialog" aria-modal="true" aria-labelledby="orderTitle">
+      <div class="order-head">
+        <div><small>BECAFE PICKUP</small><h2 id="orderTitle">Your quick order</h2></div>
+        <button class="order-close" id="orderClose" type="button" aria-label="Close order">×</button>
+      </div>
+      <p class="order-intro">Build your order here. BeCafe confirms availability and final amount on WhatsApp.</p>
+      <div class="order-items" id="orderItems"></div>
+      <div class="order-empty" id="orderEmpty">
+        <span>☕</span>
+        <b>Your order is empty</b>
+        <p>Add something from the menu or your craving recommendations.</p>
+        <button type="button" id="orderBrowseBtn">Browse menu</button>
+      </div>
+
+      <div class="order-form" id="orderForm">
+        <label>
+          <span>Pickup</span>
+          <select id="pickupTime">
+            <option value="As soon as possible">As soon as possible</option>
+            <option value="In 15 minutes">In 15 minutes</option>
+            <option value="In 30 minutes">In 30 minutes</option>
+            <option value="In 45 minutes">In 45 minutes</option>
+          </select>
+        </label>
+        <label>
+          <span>Name <em>optional</em></span>
+          <input id="orderName" type="text" maxlength="40" placeholder="Your name" autocomplete="name" />
+        </label>
+        <label>
+          <span>Notes <em>optional</em></span>
+          <textarea id="orderNotes" maxlength="180" placeholder="Less spicy, no onion, etc."></textarea>
+        </label>
+      </div>
+
+      <div class="order-total"><span>Estimated menu total</span><strong id="orderTotal">₹0</strong></div>
+      <div class="order-actions">
+        <button class="order-whatsapp" id="sendWhatsApp" type="button">Send on WhatsApp <span>↗</span></button>
+        <button class="order-copy" id="copyOrder" type="button">Copy order text</button>
+      </div>
+      <p class="order-disclaimer">Prices are exclusive of taxes and subject to current outlet availability.</p>
+    </aside>
+  </div>
+
+  <div class="size-overlay" id="sizeOverlay" aria-hidden="true">
+    <div class="size-card" role="dialog" aria-modal="true" aria-labelledby="sizeTitle">
+      <button class="size-close" id="sizeClose" type="button" aria-label="Close size selection">×</button>
+      <small>CHOOSE A SIZE</small>
+      <h3 id="sizeTitle">Item</h3>
+      <div class="size-options" id="sizeOptions"></div>
+    </div>
+  </div>
+
 
   <script src="script.js"></script>
 </body>

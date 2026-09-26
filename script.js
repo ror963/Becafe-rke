@@ -148,7 +148,10 @@ function renderMenu(){
       </div>
       <div class="menu-item-bottom">
         <span class="menu-item-note">${item.note || ''}</span>
-        <div class="menu-prices">${priceHTML(item)}</div>
+        <div class="menu-item-order">
+          <div class="menu-prices">${priceHTML(item)}</div>
+          <button class="add-order-btn" type="button" data-add-item="${encodeURIComponent(item.n)}">+ Add</button>
+        </div>
       </div>
     </article>`).join('') : `<div class="empty-state">No menu item matched “${search.value.replace(/[<>]/g,'')}”. Try another search.</div>`;
 }
@@ -329,7 +332,10 @@ function renderCraving(type = 'coffee'){
       </div>
       <div class="craving-card-footer">
         <div class="craving-price">${cravingPrice(item)}</div>
-        <button class="craving-open" type="button" data-menu-item="${encodeURIComponent(item.n)}">Find in menu →</button>
+        <div class="craving-actions">
+          <button class="craving-add" type="button" data-add-item="${encodeURIComponent(item.n)}">+ Add</button>
+          <button class="craving-open" type="button" data-menu-item="${encodeURIComponent(item.n)}">Find in menu →</button>
+        </div>
       </div>
     </article>
   `).join('');
@@ -381,3 +387,252 @@ document.addEventListener('click', event => {
     trackEvent('menu_pdf_open', { location: section });
   }
 });
+
+
+// =========================================================
+// QUICK ORDER + QR ANALYTICS
+// =========================================================
+
+// Add the outlet's direct WhatsApp number here when available, including country code
+// and digits only, e.g. '919876543210'. Leaving it blank uses WhatsApp's share flow.
+const ORDER_CONFIG = {
+  whatsappNumber: '',
+  outlet: 'Be Cafe Arya FS',
+  website: 'https://becafe-rke.vercel.app/'
+};
+
+let cart = [];
+try {
+  cart = JSON.parse(localStorage.getItem('becafeQuickOrder') || '[]');
+  if (!Array.isArray(cart)) cart = [];
+} catch (_) { cart = []; }
+
+const orderOverlay = document.querySelector('#orderOverlay');
+const orderClose = document.querySelector('#orderClose');
+const orderItems = document.querySelector('#orderItems');
+const orderEmpty = document.querySelector('#orderEmpty');
+const orderForm = document.querySelector('#orderForm');
+const orderTotal = document.querySelector('#orderTotal');
+const cartCountEl = document.querySelector('#cartCount');
+const mobileCartCount = document.querySelector('#mobileCartCount');
+const orderFab = document.querySelector('#orderFab');
+const mobileOrderBtn = document.querySelector('#mobileOrderBtn');
+const navOrderBtn = document.querySelector('#navOrderBtn');
+const mobileNavOrderBtn = document.querySelector('#mobileNavOrderBtn');
+const orderBrowseBtn = document.querySelector('#orderBrowseBtn');
+const sendWhatsApp = document.querySelector('#sendWhatsApp');
+const copyOrder = document.querySelector('#copyOrder');
+const sizeOverlay = document.querySelector('#sizeOverlay');
+const sizeClose = document.querySelector('#sizeClose');
+const sizeTitle = document.querySelector('#sizeTitle');
+const sizeOptions = document.querySelector('#sizeOptions');
+let pendingSizeItem = null;
+
+function menuItemByName(name){ return MENU.find(item => item.n === name); }
+function cartKey(name, size){ return `${name}::${size || 'ONE'}`; }
+function itemUnitPrice(item, size){
+  if (item.p) return item.p;
+  if (size === 'L') return item.l || item.m || 0;
+  return item.m || item.l || 0;
+}
+function saveCart(){
+  localStorage.setItem('becafeQuickOrder', JSON.stringify(cart));
+}
+function cartCount(){
+  return cart.reduce((sum, line) => sum + line.qty, 0);
+}
+function cartValue(){
+  return cart.reduce((sum, line) => sum + line.price * line.qty, 0);
+}
+
+function renderCart(){
+  const countValue = cartCount();
+  if (cartCountEl) cartCountEl.textContent = countValue;
+  if (mobileCartCount) mobileCartCount.textContent = countValue;
+  if (orderFab) orderFab.classList.toggle('has-items', countValue > 0);
+
+  if (!cart.length) {
+    orderItems.innerHTML = '';
+    orderEmpty.hidden = false;
+    orderForm.hidden = true;
+    orderTotal.textContent = '₹0';
+    sendWhatsApp.disabled = true;
+    copyOrder.disabled = true;
+    return;
+  }
+
+  orderEmpty.hidden = true;
+  orderForm.hidden = false;
+  sendWhatsApp.disabled = false;
+  copyOrder.disabled = false;
+  orderItems.innerHTML = cart.map((line, index) => `
+    <div class="order-line">
+      <div>
+        <h4>${line.name}</h4>
+        <small>${line.size ? `${line.size} size · ` : ''}₹${line.price} each</small>
+      </div>
+      <div class="order-line-right">
+        <span class="order-line-price">₹${line.price * line.qty}</span>
+        <div class="qty-controls">
+          <button type="button" data-cart-dec="${index}" aria-label="Decrease ${line.name}">−</button>
+          <b>${line.qty}</b>
+          <button type="button" data-cart-inc="${index}" aria-label="Increase ${line.name}">+</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+  orderTotal.textContent = `₹${cartValue()}`;
+}
+renderCart();
+
+function addCartLine(item, size){
+  const price = itemUnitPrice(item, size);
+  const key = cartKey(item.n, size);
+  const existing = cart.find(line => line.key === key);
+  if (existing) existing.qty += 1;
+  else cart.push({ key, name:item.n, size:size || '', price, qty:1 });
+  saveCart();
+  renderCart();
+  trackEvent('add_to_order', { item:item.n, size:size || 'single', price });
+}
+
+function chooseSize(item){
+  pendingSizeItem = item;
+  sizeTitle.textContent = item.n;
+  const options = [];
+  if (item.m) options.push({size:'M', price:item.m});
+  if (item.l) options.push({size:'L', price:item.l});
+  sizeOptions.innerHTML = options.map(opt => `
+    <button class="size-option" type="button" data-size="${opt.size}">
+      <span>${opt.size === 'M' ? 'Medium' : 'Large'}</span><b>₹${opt.price}</b>
+    </button>
+  `).join('');
+  sizeOverlay.classList.add('open');
+  sizeOverlay.setAttribute('aria-hidden','false');
+}
+
+function requestAdd(name){
+  const item = menuItemByName(name);
+  if (!item) return;
+  if (item.m && item.l) chooseSize(item);
+  else {
+    const size = item.m ? 'M' : item.l ? 'L' : '';
+    addCartLine(item, size);
+  }
+}
+
+document.addEventListener('click', event => {
+  const add = event.target.closest('[data-add-item]');
+  if (add) {
+    requestAdd(decodeURIComponent(add.dataset.addItem));
+    return;
+  }
+  const inc = event.target.closest('[data-cart-inc]');
+  const dec = event.target.closest('[data-cart-dec]');
+  if (inc) {
+    cart[Number(inc.dataset.cartInc)].qty += 1;
+    saveCart(); renderCart();
+  }
+  if (dec) {
+    const i = Number(dec.dataset.cartDec);
+    cart[i].qty -= 1;
+    if (cart[i].qty <= 0) cart.splice(i,1);
+    saveCart(); renderCart();
+  }
+});
+
+sizeOptions?.addEventListener('click', event => {
+  const btn = event.target.closest('[data-size]');
+  if (!btn || !pendingSizeItem) return;
+  addCartLine(pendingSizeItem, btn.dataset.size);
+  closeSize();
+  openOrder();
+});
+function closeSize(){
+  sizeOverlay.classList.remove('open');
+  sizeOverlay.setAttribute('aria-hidden','true');
+  pendingSizeItem = null;
+}
+sizeClose?.addEventListener('click', closeSize);
+sizeOverlay?.addEventListener('click', e => { if (e.target === sizeOverlay) closeSize(); });
+
+function openOrder(){
+  orderOverlay.classList.add('open');
+  orderOverlay.setAttribute('aria-hidden','false');
+  document.body.style.overflow = 'hidden';
+  renderCart();
+  setMobile(false);
+}
+function closeOrder(){
+  orderOverlay.classList.remove('open');
+  orderOverlay.setAttribute('aria-hidden','true');
+  document.body.style.overflow = '';
+}
+[orderFab,mobileOrderBtn,navOrderBtn,mobileNavOrderBtn].forEach(btn => btn?.addEventListener('click', openOrder));
+orderClose?.addEventListener('click', closeOrder);
+orderOverlay?.addEventListener('click', e => { if (e.target === orderOverlay) closeOrder(); });
+orderBrowseBtn?.addEventListener('click', () => {
+  closeOrder();
+  setMenuExpanded(true);
+  document.querySelector('#menu')?.scrollIntoView({behavior:'smooth'});
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (sizeOverlay?.classList.contains('open')) closeSize();
+    else if (orderOverlay?.classList.contains('open')) closeOrder();
+  }
+});
+
+function buildOrderText(){
+  const pickup = document.querySelector('#pickupTime')?.value || 'As soon as possible';
+  const name = document.querySelector('#orderName')?.value.trim();
+  const notes = document.querySelector('#orderNotes')?.value.trim();
+  const lines = cart.map(line => {
+    const size = line.size ? ` (${line.size})` : '';
+    return `${line.qty}× ${line.name}${size} — ₹${line.price * line.qty}`;
+  });
+  return [
+    `Hi ${ORDER_CONFIG.outlet}! I'd like to place a pickup order:`,
+    '',
+    ...lines,
+    '',
+    `Estimated menu total: ₹${cartValue()}`,
+    `Pickup: ${pickup}`,
+    name ? `Name: ${name}` : '',
+    notes ? `Notes: ${notes}` : '',
+    '',
+    'Please confirm availability and final amount.',
+    `Sent from ${ORDER_CONFIG.website}`
+  ].filter((line, i, arr) => !(line === '' && arr[i-1] === '')).join('\n');
+}
+
+sendWhatsApp?.addEventListener('click', () => {
+  if (!cart.length) return;
+  const text = buildOrderText();
+  const base = ORDER_CONFIG.whatsappNumber
+    ? `https://wa.me/${ORDER_CONFIG.whatsappNumber}?text=`
+    : 'https://wa.me/?text=';
+  trackEvent('whatsapp_order_click', { items:cartCount(), value:cartValue(), direct:!!ORDER_CONFIG.whatsappNumber });
+  window.open(base + encodeURIComponent(text), '_blank', 'noopener');
+});
+
+copyOrder?.addEventListener('click', async () => {
+  if (!cart.length) return;
+  const text = buildOrderText();
+  try {
+    await navigator.clipboard.writeText(text);
+    const original = copyOrder.textContent;
+    copyOrder.textContent = 'Copied ✓';
+    setTimeout(() => copyOrder.textContent = original, 1500);
+    trackEvent('order_text_copied', { items:cartCount(), value:cartValue() });
+  } catch (_) {
+    window.prompt('Copy your order:', text);
+  }
+});
+
+// QR scans use a tagged URL so they can be counted separately.
+const params = new URLSearchParams(location.search);
+if (params.get('utm_source') === 'table_qr') {
+  trackEvent('qr_menu_scan', { campaign: params.get('utm_campaign') || 'menu' });
+  if (location.hash !== '#menu') location.hash = 'menu';
+}
