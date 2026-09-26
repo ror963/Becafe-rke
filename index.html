@@ -16,6 +16,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
+  <script defer src="/_vercel/speed-insights/script.js"></script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -55,6 +61,7 @@
 
     <nav class="nav" aria-label="Primary navigation">
       <a href="#experience">Experience</a>
+      <a href="#cravings">Pick for me</a>
       <a href="#menu">Menu</a>
       <a href="#gallery">Gallery</a>
       <a href="#reviews">Reviews</a>
@@ -67,6 +74,7 @@
 
   <div class="mobile-nav" id="mobileNav" aria-hidden="true">
     <a href="#experience">Experience</a>
+    <a href="#cravings">Pick for me</a>
     <a href="#menu">Menu</a>
     <a href="#gallery">Gallery</a>
     <a href="#reviews">Reviews</a>
@@ -105,6 +113,44 @@
       <div class="marquee-track">
         <span>COFFEE FIRST</span><i>✦</i><span>BREWING JOURNEYS</span><i>✦</i><span>FRESH BITES</span><i>✦</i><span>COLD SIPS</span><i>✦</i><span>STAY A LITTLE</span><i>✦</i>
         <span>COFFEE FIRST</span><i>✦</i><span>BREWING JOURNEYS</span><i>✦</i><span>FRESH BITES</span><i>✦</i><span>COLD SIPS</span><i>✦</i><span>STAY A LITTLE</span><i>✦</i>
+      </div>
+    </section>
+
+
+    <section class="roadtrip-section section" id="roadtrip">
+      <div class="roadtrip-copy reveal">
+        <p class="eyebrow">Your road-trip pit stop</p>
+        <h2>Refuel the car.<br><em>Reset the journey.</em></h2>
+        <p class="lead">BeCafe at Arya Filling Station gives the highway stop a better rhythm — coffee, fresh vegetarian bites, comfortable seating and a quick breather before you get moving again.</p>
+        <div class="roadtrip-chips" aria-label="BeCafe road trip features">
+          <span>☕ Coffee</span>
+          <span>🥪 Fresh bites</span>
+          <span>🪑 Comfortable seating</span>
+          <span>⛽ Fuel stop</span>
+        </div>
+        <a class="btn btn-yellow roadtrip-map-btn" href="https://maps.app.goo.gl/uAaVFkDz9fiThdFA9?g_st=ac" target="_blank" rel="noopener">Add BeCafe to your route <span>↗</span></a>
+      </div>
+      <div class="roadtrip-visual reveal delay-1">
+        <img src="day-1.webp" alt="BeCafe at Arya Filling Station on the Roorkee Bypass" loading="lazy" />
+        <div class="route-card">
+          <span class="route-dot"></span>
+          <div><small>BE CAFE ARYA FS</small><strong>Roorkee Bypass</strong><p>Pull in · refresh · continue</p></div>
+          <b>↗</b>
+        </div>
+      </div>
+    </section>
+
+    <section class="live-offer section" id="offer" hidden>
+      <div class="offer-shell reveal">
+        <div class="offer-status"><span></span><b id="offerLabel">TODAY AT BECAFE</b></div>
+        <div class="offer-copy">
+          <h2 id="offerTitle">Road-trip refresh, sorted.</h2>
+          <p id="offerText">Ask at the counter for today’s coffee + quick-bite combo.</p>
+        </div>
+        <div class="offer-actions">
+          <a class="btn btn-yellow" id="offerCta" href="#menu">See popular picks <span>↗</span></a>
+          <small id="offerNote">Subject to availability at the outlet.</small>
+        </div>
       </div>
     </section>
 
@@ -159,6 +205,26 @@
         <img src="counter.webp" alt="BeCafe service counter and food display" loading="lazy" />
         <div class="reel-note">coffee • bites • bakery</div>
       </div>
+    </section>
+
+
+    <section class="craving-section section" id="cravings">
+      <div class="craving-heading reveal">
+        <div>
+          <p class="eyebrow">Skip the scrolling</p>
+          <h2>What are you<br><em>craving right now?</em></h2>
+        </div>
+        <p>Pick a mood and we’ll surface three menu ideas instantly. Tap any recommendation to jump straight to it in the full menu.</p>
+      </div>
+
+      <div class="craving-tabs reveal" role="tablist" aria-label="Choose what you are craving">
+        <button class="craving-tab active" type="button" data-craving="coffee" aria-pressed="true"><span>☕</span><b>Coffee</b><small>warm &amp; comforting</small></button>
+        <button class="craving-tab" type="button" data-craving="hungry" aria-pressed="false"><span>🍔</span><b>Hungry</b><small>proper quick bites</small></button>
+        <button class="craving-tab" type="button" data-craving="cold" aria-pressed="false"><span>🥤</span><b>Something cold</b><small>chilled &amp; refreshing</small></button>
+        <button class="craving-tab" type="button" data-craving="sweet" aria-pressed="false"><span>🍫</span><b>Something sweet</b><small>finish on a high</small></button>
+      </div>
+
+      <div class="craving-results reveal delay-1" id="cravingResults" aria-live="polite"></div>
     </section>
 
     <section class="menu-section section" id="menu">

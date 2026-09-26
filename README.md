@@ -1,33 +1,48 @@
-# BeCafe immersive website
+# BeCafe RKE — Growth Upgrade
 
-Static production-ready site. No build step is required.
+This build is ready for the existing flat-file GitHub/Vercel deployment.
 
-## Deploy on Vercel
-1. Upload this folder to a GitHub repository, or drag the folder into a new Vercel static project.
-2. Framework preset: **Other**.
-3. Build command: leave blank.
-4. Output directory: leave blank / project root.
-5. Deploy.
+## New customer-facing features
+- Interactive **What are you craving?** recommender with Coffee / Hungry / Something Cold / Sweet modes.
+- **Road-trip pit stop** section with a direct Google Maps CTA.
+- Configurable **Today at BeCafe** live-offer block.
+- Existing compact menu, real Google reviews, gallery, video, Instagram and Maps integration retained.
+- Vercel Web Analytics + Speed Insights scripts included.
 
-## Before attaching a custom domain
-The exact Google Maps location link is already configured in `index.html`, and the Instagram profile is set to `@becafe_rke`.
+## Change the live offer
+Open `script.js` and edit the `LIVE_OFFER` object near the bottom:
 
-## Content included
-- Real café exterior/interior photos supplied by the owner
-- Real café video supplied by the owner, transcoded to H.264 for browser compatibility
-- Full menu data transcribed from the supplied BeCafe menu PDF
-- Official menu PDF included at `becafe-official-menu.pdf`
-- BeCafe customer-care email plus the outlet Instagram handle @becafe_rke
+- `active: true` shows the offer; `false` hides it.
+- Change `title`, `text`, `cta`, `href`, and `note`.
+- Commit the edit to GitHub; Vercel redeploys automatically.
 
-## Menu note
-Prices shown are taken from the supplied menu and are exclusive of taxes. Some items/flavours may be subject to availability.
+This lets you update the offer without touching the HTML or CSS.
 
+## Analytics
+The site includes Vercel Web Analytics and Speed Insights.
 
-## September 2026 menu update
-- Menu prices/items updated from the new 13-page scanned BeCafe menu supplied by the owner.
-- `becafe-official-menu.pdf` is the new menu.
-- Google Reviews section links directly to the outlet Google Maps listing and embeds the location. Customer quotes are not hard-coded unless they can be verified.
+After deployment:
+1. Open the BeCafe project in Vercel.
+2. Open **Analytics** and enable Web Analytics if it is not already enabled.
+3. Open **Speed Insights** and enable it.
+4. Visit the live site in an incognito/private window, then check Analytics after data starts arriving.
 
+Tracked conversion hooks include:
+- menu opened
+- craving selected
+- recommended item opened
+- directions click
+- Google reviews click
+- Instagram click
+- menu PDF opened
+- live-offer click
 
-### Compact menu update
-The homepage now shows a small Popular Picks menu preview. Visitors can tap **View full menu** to reveal category filters, search, the complete item list and add-on notes.
+Page-view analytics work with Vercel Web Analytics. Availability of custom conversion events depends on the Vercel plan.
+
+## Deploy this update
+For the existing GitHub repository, replace only:
+- `index.html`
+- `style.css`
+- `script.js`
+
+Or upload the complete build from the full ZIP.

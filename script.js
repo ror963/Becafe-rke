@@ -233,3 +233,151 @@ if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
 }
 
 document.querySelector('#year').textContent = new Date().getFullYear();
+
+
+// =========================================================
+// GROWTH UPGRADE
+// Craving recommender + editable live offer + conversion analytics
+// =========================================================
+
+const LIVE_OFFER = {
+  active: true,
+  label: 'TODAY AT BECAFE',
+  title: 'Road-trip refresh, sorted.',
+  text: 'Ask at the counter for today’s coffee + quick-bite combo.',
+  cta: 'See popular picks',
+  href: '#menu',
+  note: 'Subject to availability at the outlet.'
+};
+
+function renderLiveOffer(){
+  const section = document.querySelector('#offer');
+  if (!section) return;
+  if (!LIVE_OFFER.active) {
+    section.hidden = true;
+    return;
+  }
+  section.hidden = false;
+  const label = section.querySelector('#offerLabel');
+  const title = section.querySelector('#offerTitle');
+  const text = section.querySelector('#offerText');
+  const cta = section.querySelector('#offerCta');
+  const note = section.querySelector('#offerNote');
+  if (label) label.textContent = LIVE_OFFER.label;
+  if (title) title.textContent = LIVE_OFFER.title;
+  if (text) text.textContent = LIVE_OFFER.text;
+  if (cta) {
+    cta.childNodes[0].nodeValue = `${LIVE_OFFER.cta} `;
+    cta.href = LIVE_OFFER.href;
+  }
+  if (note) note.textContent = LIVE_OFFER.note;
+}
+renderLiveOffer();
+
+const CRAVINGS = {
+  coffee: {
+    items: ['Cappuccino', 'Hazelnut Mocha', 'French Rose Latte']
+  },
+  hungry: {
+    items: ['Double Tikki Veg Burger', 'Paneer Tikka Wrap', 'Farmhouse Veg Pizza']
+  },
+  cold: {
+    items: ['Cold Chocolate', 'Oreo Shake', 'Classic Mojito']
+  },
+  sweet: {
+    items: ['Brownie Sizzler', 'Nutella Brownie Waffle', 'Blueberry Muffin']
+  }
+};
+
+function cravingPrice(item){
+  if (item.p) return `₹${item.p}`;
+  if (item.m && item.l) return `₹${item.m} <small>M</small> · ₹${item.l} <small>L</small>`;
+  if (item.m) return `₹${item.m}`;
+  if (item.l) return `₹${item.l}`;
+  return '';
+}
+
+function trackEvent(name, data = {}){
+  try {
+    if (typeof window.va === 'function') {
+      window.va('event', { name, data });
+    }
+  } catch (_) {}
+}
+
+function openMenuItem(itemName){
+  setMenuExpanded(true);
+  category = 'all';
+  tabs.forEach((t, i) => t.classList.toggle('active', i === 0));
+  search.value = itemName;
+  renderMenu();
+  trackEvent('recommendation_opened', { item: itemName });
+  setTimeout(() => menuSection?.scrollIntoView({behavior:'smooth', block:'start'}), 60);
+}
+
+function renderCraving(type = 'coffee'){
+  const target = document.querySelector('#cravingResults');
+  const config = CRAVINGS[type];
+  if (!target || !config) return;
+  const items = config.items.map(name => MENU.find(item => item.n === name)).filter(Boolean);
+  target.innerHTML = items.map((item, index) => `
+    <article class="craving-card" data-number="0${index + 1}">
+      <div>
+        <small>${item.s}</small>
+        <h3>${item.n}</h3>
+        <p>${item.note || (item.rec ? 'A BeCafe favourite worth a detour.' : 'An easy pick for your next café stop.')}</p>
+      </div>
+      <div class="craving-card-footer">
+        <div class="craving-price">${cravingPrice(item)}</div>
+        <button class="craving-open" type="button" data-menu-item="${encodeURIComponent(item.n)}">Find in menu →</button>
+      </div>
+    </article>
+  `).join('');
+
+  target.querySelectorAll('.craving-open').forEach(btn => {
+    btn.addEventListener('click', () => openMenuItem(decodeURIComponent(btn.dataset.menuItem)));
+  });
+}
+
+document.querySelectorAll('.craving-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.craving-tab').forEach(other => {
+      const active = other === btn;
+      other.classList.toggle('active', active);
+      other.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+    const type = btn.dataset.craving;
+    renderCraving(type);
+    trackEvent('craving_selected', { type });
+  });
+});
+renderCraving('coffee');
+
+// Key conversion events.
+// Page views / visitors are tracked by Vercel Web Analytics.
+// These custom events appear when the Vercel plan supports custom events.
+menuExpandBtn?.addEventListener('click', () => {
+  if (menuExpandBtn.getAttribute('aria-expanded') === 'true') {
+    trackEvent('menu_opened', { source: 'menu_section' });
+  }
+});
+
+document.querySelector('#offerCta')?.addEventListener('click', () => {
+  trackEvent('offer_click', { offer: LIVE_OFFER.title });
+});
+
+document.addEventListener('click', event => {
+  const link = event.target.closest('a');
+  if (!link) return;
+  const href = link.getAttribute('href') || '';
+  const section = link.closest('section')?.id || 'site';
+
+  if (href.includes('maps.app.goo.gl')) {
+    const name = section === 'reviews' ? 'google_reviews_click' : 'directions_click';
+    trackEvent(name, { location: section });
+  } else if (href.includes('instagram.com/becafe_rke')) {
+    trackEvent('instagram_click', { location: section });
+  } else if (href.includes('becafe-official-menu.pdf')) {
+    trackEvent('menu_pdf_open', { location: section });
+  }
+});
